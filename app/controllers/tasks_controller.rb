@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
     def index
-        @tasks = Task.all
+        @tasks = Task.oreder(id: :desc).page(params[:page]).per(10)
     end
     
     def show
