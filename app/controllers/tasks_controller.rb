@@ -1,6 +1,12 @@
 class TasksController < ApplicationController
+    before_action :require_user_logged_in
+    
     def index
-        @tasks = Task.order(id: :desc).page(params[:page]).per(10)
+        if logged_in?
+            @task = current_user.tasks.build  # form_with 用
+            @tasks = current_user.tasks.order(id: :desc).page(params[:page])
+        end
+        # @tasks = Task.order(id: :desc).page(params[:page]).per(10)
     end
     
     def show
@@ -12,12 +18,13 @@ class TasksController < ApplicationController
     end
     
     def create
-        @task = Task.new(task_params)
-        
+        # @task = Task.new(task_params)
+        @task = current_user.tasks.build(task_params)
         if @task.save
             flash[:success] = "task が保存されました"
             redirect_to @task
         else
+            @tasks = current_user.tasks.order(id: :desc).page(params[:page])
             flash.now[:danger] = "task が保存されませんでした"
             render :new
         end
@@ -52,4 +59,11 @@ class TasksController < ApplicationController
     def task_params
         params.require(:task).permit(:content, :status)
     end
+    
+    def correct_user
+     @tasks = current_user.tasks.find_by(id: params[:id])
+     unless @task
+     redirect_to root_url
+     end
+   end
 end

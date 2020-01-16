@@ -1,10 +1,39 @@
-<h1>タスク一覧</h1>
-<ul>
-    <% @tasks.each do |task| %>
-     <li><%= link_to task.id, task %> : <%= task.status %> &gt;<%= task.content %></li> 
-    <% end %>
-</ul>
+<% if logged_in? %>
+  <!--<p>ログイン完了ユーザ: </p>-->
+   <div class="row">
+    <aside class="col-sm-4">
+      <%= form_with(model: @task, local: true) do |f| %>
+        <%= paginate @tasks %>
+        <%= link_to "新規タスクの登録", new_task_path %>
+      <% end %>
+    </aside>
+    <div class="col-sm-8">
+        <h1>タスク一覧</h1>
+        <ul>
+            <% @tasks.each do |task| %>
+             <li><%= link_to task.id, task %> : <%= task.status %> &gt;<%= task.content %></li> 
+            
+            <% end %>
+            
+        </ul>
+    </div>
+  </div>
+<% else %>
+  <div class="center jumbotron">
+    <div class="text-center">
+      <h1>Welcome to the Microposts</h1>
+      <%= link_to 'Sign up now!', signup_path, class: 'btn btn-lg btn-primary' %>
+    </div>
+  </div>
+<% end %>
 
-<%= paginate @tasks %>
+<!--<h1>タスク一覧</h1>-->
+<!--<ul>-->
+<!--    <% @tasks.each do |task| %>-->
+<!--     <li><%= link_to task.id, task %> : <%= task.status %> &gt;<%= task.content %></li> -->
+<!--    <% end %>-->
+<!--</ul>-->
 
-<%= link_to "新規タスクの登録", new_task_path %>
+<!--<%= paginate @tasks %>-->
+
+<!--<%= link_to "新規タスクの登録", new_task_path %>-->
