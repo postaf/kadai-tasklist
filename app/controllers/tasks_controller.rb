@@ -1,5 +1,6 @@
 class TasksController < ApplicationController
     before_action :require_user_logged_in
+    before_action :correct_user, only: [:destroy,:show,:edit,:update]
     
     def index
         if logged_in?
@@ -18,7 +19,7 @@ class TasksController < ApplicationController
     end
     
     def create
-        # @task = Task.new(task_params)
+        @task = Task.new(task_params)
         @task = current_user.tasks.build(task_params)
         if @task.save
             flash[:success] = "task が保存されました"
@@ -61,9 +62,9 @@ class TasksController < ApplicationController
     end
     
     def correct_user
-     @tasks = current_user.tasks.find_by(id: params[:id])
+     @task = current_user.tasks.find_by(id: params[:id])
      unless @task
-     redirect_to root_url
+        redirect_to root_url
      end
    end
 end
