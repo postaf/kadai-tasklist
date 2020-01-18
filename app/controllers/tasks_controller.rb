@@ -4,7 +4,7 @@ class TasksController < ApplicationController
     
     def index
         if logged_in?
-            @task = current_user.tasks.build  # form_with 用
+            # @task = current_user.tasks.build  # form_with 用
             @tasks = current_user.tasks.order(id: :desc).page(params[:page])
         end
         # @tasks = Task.order(id: :desc).page(params[:page]).per(10)
@@ -62,7 +62,7 @@ class TasksController < ApplicationController
     end
     
     def correct_user
-     @task = current_user.tasks.find_by(id: params[:id])
+     @tasks = current_user.tasks.find_by(id: params[:id])
      unless @task
         redirect_to root_url
      end
